@@ -200,7 +200,8 @@ class App extends Component {
         <ImageLinkForm 
           onInputChange1={this.onInputChange} 
           onButtonSubmit1={this.onButtonSubmit} />
-        <FaceRecognition />
+        <FaceRecognition 
+          imageUrl1={this.state.imageUrl} />
         <Particles className='particles' id="tsparticles" init={particlesInit} loaded={particlesLoaded} options={particlesOptions}/>
       </div>
     );
