@@ -6,6 +6,8 @@ import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
+import Signin from './components/Signin/Signin';
+import Register from './components/Register/Register';
 import 'tachyons';
 import Particles from 'react-tsparticles'
 
@@ -16,7 +18,7 @@ import Particles from 'react-tsparticles'
 //  });
 
 
-// Below 3 variables are for the particles moving feature
+// Below variable is for the particles moving feature
 const particlesOptions = {
   fpsLimit: 60,
   interactivity: {
@@ -56,7 +58,7 @@ const particlesOptions = {
       enable: true,
         outMode: "bounce",
         random: false,
-        speed: 4,
+        speed: 2,
         straight: false,
       },
       number: {
@@ -79,14 +81,6 @@ const particlesOptions = {
     },
     detectRetina: true,
 }
-
-const particlesInit = (main) => {
-  console.log(main);
-};
-
-const particlesLoaded = (container) => {
-  console.log(container);
-};
 
 // let raw = JSON.stringify({
 //   "user_app_id": {
@@ -135,21 +129,54 @@ class App extends Component {
     super();
     this.state = {
       input: '',
-      imageUrl: ''
+      imageUrl: '',
+      box: {},
+      route: 'signin',
+      isSignedIn: false
     }
   }
 
+  // get response from service and return the box details
+  calculateFaceLocation = (data) => {
+    const clarifaiFaceDetected = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById('inputImage');
+    const width = Number(image.width);
+    const height = Number(image.height);
+    // console.log(width, height, clarifaiFaceDetected) --> doing a console.log here to text if things work
+    return {
+      //values like bottom_row are extracted from services
+      bottomRow: height - (clarifaiFaceDetected.bottom_row * height),
+      leftCol: clarifaiFaceDetected.left_col * width,
+      rightCol: width - (clarifaiFaceDetected.right_col * width),
+      topRow: clarifaiFaceDetected.top_row * height
+    }
+  }
+
+  // update the state with the box details received above
+  displayFaceBox = (box) => {
+    this.setState({box: box}); // with ES6 we can make it like "this.setState({box});"
+  }
+
+  onRouteChange = (route) => {
+    if (route === 'signout') {
+      this.setState({isSignedIn: false})
+    } else if (route === 'home') {
+      this.setState({isSignedIn: true})
+    }
+    this.setState({route: route});
+  }
+
   onInputChange = (event) => {
-    console.log(event.target.value);
     this.setState({input: event.target.value});
   }
 
   onButtonSubmit = () => {
-    console.log('click');
+    // console.log('Submitted');
     this.setState({imageUrl: this.state.input});
     // NOTE: MODEL_VERSION_ID is optional, you can also call prediction with the MODEL_ID only
     // https://api.clarifai.com/v2/models/{YOUR_MODEL_ID}/outputs
     // this will default to the latest version_id
+    // https://docs.clarifai.com/api-guide/predict/images
     fetch("https://api.clarifai.com/v2/models/a403429f2ddf4b49b307e318f00e528b/outputs",
     {
       method: 'POST',
@@ -176,7 +203,7 @@ class App extends Component {
       })
     })
     .then(response => response.text())
-    .then(result => console.log(JSON.parse(result, null, 2).outputs[0].data))
+    .then(result => this.displayFaceBox(this.calculateFaceLocation(JSON.parse(result, null, 2))))
     .catch(error => console.log('error', error));
     // deprecated models
     // app.models
@@ -191,18 +218,29 @@ class App extends Component {
   }
 
   render() {
+    const {isSignedIn, box, imageUrl, route} = this.state;
     return (
       <div className="App">
-        <Navigation />
-        <Logo />
-        <Rank />
-        {/* The below onInputChange is a property */}
-        <ImageLinkForm 
-          onInputChange1={this.onInputChange} 
-          onButtonSubmit1={this.onButtonSubmit} />
-        <FaceRecognition 
-          imageUrl1={this.state.imageUrl} />
-        <Particles className='particles' id="tsparticles" init={particlesInit} loaded={particlesLoaded} options={particlesOptions}/>
+        <Navigation isSignedIn1={isSignedIn} onRouteChange1={this.onRouteChange}/>
+        <Particles className='particles' id="tsparticles" options={particlesOptions}/>
+        { route === 'home'
+          ? <div> 
+              <Logo />
+              <Rank />
+              {/* The below onInputChange is a pro5555555perty */}
+              <ImageLinkForm 
+                onInputChange1={this.onInputChange} 
+                onButtonSubmit1={this.onButtonSubmit} />
+              <FaceRecognition 
+                box1={box}
+                imageUrl1={imageUrl} />
+            </div>
+          : (
+            this.state.route === 'signin'
+            ? <Signin onRouteChange1={this.onRouteChange}/>
+            : <Register onRouteChange1={this.onRouteChange}/>
+          )
+        }
       </div>
     );
   }
