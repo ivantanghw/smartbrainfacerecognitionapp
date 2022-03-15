@@ -4,7 +4,8 @@ const Register = ( {onRouteChange1} ) => {
     return (
         <article className="mv3 mw6 center bg-white o-90 br3 pa3 ba b--black-10 shadow-5 center">
             <main className="pa4 black-80">
-                <form className="measure">
+                {/* If we use "<form>" tag, it will send warning that we are not sending forms to anywhere */}
+                <div className="measure"> 
                     <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
                         <legend className="f2 fw6 ph0 mh0">Register</legend>
                         <div className="mt3">
@@ -23,7 +24,7 @@ const Register = ( {onRouteChange1} ) => {
                     <div className="">
                         <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Register" onClick={ () => onRouteChange1('home') }/>
                     </div>
-                </form>
+                </div>
             </main>
         </article>
     )

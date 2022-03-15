@@ -173,6 +173,8 @@ class App extends Component {
   onButtonSubmit = () => {
     // console.log('Submitted');
     this.setState({imageUrl: this.state.input});
+
+    
     // NOTE: MODEL_VERSION_ID is optional, you can also call prediction with the MODEL_ID only
     // https://api.clarifai.com/v2/models/{YOUR_MODEL_ID}/outputs
     // this will default to the latest version_id
