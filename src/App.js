@@ -132,8 +132,27 @@ class App extends Component {
       imageUrl: '',
       box: {},
       route: 'signin',
-      isSignedIn: false
+      isSignedIn: false,
+      user: {
+        id: '',
+        name: '',
+        email:'',
+        password: '',
+        entries: 0,
+        joined: ''
+      }
     }
+  }
+
+  loadUser = (data) => {
+    this.setState({user: {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      entries: data.entries,
+      joined: data.joined
+    }})
   }
 
   // get response from service and return the box details
@@ -228,7 +247,9 @@ class App extends Component {
         { route === 'home'
           ? <div> 
               <Logo />
-              <Rank />
+              <Rank 
+                userName={this.state.user.name} 
+                userEntries={this.state.user.entries} />
               {/* The below onInputChange is a pro5555555perty */}
               <ImageLinkForm 
                 onInputChange1={this.onInputChange} 
@@ -239,8 +260,8 @@ class App extends Component {
             </div>
           : (
             this.state.route === 'signin'
-            ? <Signin onRouteChange1={this.onRouteChange}/>
-            : <Register onRouteChange1={this.onRouteChange}/>
+            ? <Signin loadUser1={this.loadUser} onRouteChange1={this.onRouteChange}/>
+            : <Register loadUser1={this.loadUser} onRouteChange1={this.onRouteChange}/>
           )
         }
       </div>

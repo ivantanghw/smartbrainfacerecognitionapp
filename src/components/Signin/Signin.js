@@ -26,7 +26,20 @@ class Signin extends React.Component {
                 password: this.state.signInPassword
             })
         })
-        this.props.onRouteChange1('home');
+            .then(response => response.json())
+            .then(user => {
+                if (user.id) {
+                    // Check if user exist. Did we receive a user with a property of id?
+                    this.props.loadUser1(user);
+                    this.props.onRouteChange1('home')
+                }
+        })
+            // .then(response => response.json())
+            // .then(data => {
+            //     if (data === 'success') {
+            //         this.props.onRouteChange1('home');
+            //     }
+            // })
     }
 
     onRegister = () => {
@@ -60,7 +73,11 @@ class Signin extends React.Component {
                         </div>
                         </fieldset>
                         <div className="">
-                        <input onClick={this.onSubmitSignIn} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Sign in" />
+                        <input 
+                            onClick={this.onSubmitSignIn} 
+                            className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" 
+                            type="submit" 
+                            value="Sign in" />
                         </div>
                         <div className="lh-copy mt3">
                         <p onClick={this.onRegister} className="pointer f6 link dim black db">Register</p>
@@ -70,7 +87,6 @@ class Signin extends React.Component {
             </article>
         )
     }
-    
 }
 
 export default Signin;
