@@ -193,7 +193,6 @@ class App extends Component {
     // console.log('Submitted');
     this.setState({imageUrl: this.state.input});
 
-    
     // NOTE: MODEL_VERSION_ID is optional, you can also call prediction with the MODEL_ID only
     // https://api.clarifai.com/v2/models/{YOUR_MODEL_ID}/outputs
     // this will default to the latest version_id
@@ -224,7 +223,25 @@ class App extends Component {
       })
     })
     .then(response => response.text())
-    .then(result => this.displayFaceBox(this.calculateFaceLocation(JSON.parse(result, null, 2))))
+    // .then(result => this.displayFaceBox(this.calculateFaceLocation(JSON.parse(result, null, 2))))
+    .then(result => {
+      if (result) {
+        fetch('http://localhost:3001/image', {
+          method: 'put',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+              id: this.state.user.id
+          })
+        })
+        .then(res => res.json())
+        .then(count => {
+          this.setState(Object.assign(this.state.user, {
+            entries: count
+          }))
+        })
+      this.displayFaceBox(this.calculateFaceLocation(JSON.parse(result, null, 2)))
+      }
+    })
     .catch(error => console.log('error', error));
     // deprecated models
     // app.models
