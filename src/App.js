@@ -202,13 +202,13 @@ class App extends Component {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Authorization': 'Key 3ef7c5cbf81b4bcc863b3abef3fc0834'
+        'Authorization': 'Key ID_PUT_HERE'
       },
       body: 
         JSON.stringify({
         "user_app_id": {
-          "user_id": "tra7i359vth1",
-          "app_id": "d20f248f4a5f4db88aa17ed8c7169ef2"
+          "user_id": "USER_ID",
+          "app_id": "APP_ID"
         },
         "inputs": [
           {

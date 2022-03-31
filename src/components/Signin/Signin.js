@@ -5,7 +5,8 @@ class Signin extends React.Component {
         super(props);
         this.state = {
             signInEmail: '',
-            signInPassword: ''
+            signInPassword: '',
+            isPasswordCorrect: true
         }
     }
 
@@ -32,6 +33,9 @@ class Signin extends React.Component {
                     // Check if user exist. Did we receive a user with a property of id?
                     this.props.loadUser1(user);
                     this.props.onRouteChange1('home')
+                    this.setState({isPasswordCorrect: true})
+                } else {
+                    this.setState({isPasswordCorrect: false})
                 }
         })
             // .then(response => response.json())
@@ -70,8 +74,13 @@ class Signin extends React.Component {
                                 type="password" 
                                 name="password" 
                                 id="password" />
+                            { this.state.isPasswordCorrect === false
+                                ? <p className="f6 red db">Invalid email or password.</p>
+                                : null
+                        }
                         </div>
                         </fieldset>
+
                         <div className="">
                         <input 
                             onClick={this.onSubmitSignIn} 
