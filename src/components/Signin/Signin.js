@@ -38,12 +38,6 @@ class Signin extends React.Component {
                     this.setState({isPasswordCorrect: false})
                 }
         })
-            // .then(response => response.json())
-            // .then(data => {
-            //     if (data === 'success') {
-            //         this.props.onRouteChange1('home');
-            //     }
-            // })
     }
 
     onRegister = () => {

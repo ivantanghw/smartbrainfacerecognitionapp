@@ -23,19 +23,19 @@ class Register extends React.Component {
     }
 
     onRegisterChange = () => {
+        const {registerName, registerEmail, registerPassword} = this.state
         fetch('http://localhost:3001/Register', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                name: this.state.registerName,
-                email: this.state.registerEmail,
-                password: this.state.registerPassword
+                name: registerName,
+                email: registerEmail,
+                password: registerPassword
             })
         })
             .then(response => response.json())
             .then(user => {
-                if (user) {
-                    // as "loadUser" is function that entire app needs, so use this.props
+                if (user.id) {
                     this.props.loadUser1(user)
                     this.props.onRouteChange1('home');
                 }
@@ -43,7 +43,6 @@ class Register extends React.Component {
     }
 
     render() {
-        // const { onRouteChange1 } = this.props;
         return (
             <article className="mv3 mw6 center bg-white o-90 br3 pa3 ba b--black-10 shadow-5 center">
                 <main className="pa4 black-80">
