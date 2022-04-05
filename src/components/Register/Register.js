@@ -24,7 +24,7 @@ class Register extends React.Component {
 
     onRegisterChange = () => {
         const {registerName, registerEmail, registerPassword} = this.state
-        fetch('http://localhost:3000/Register', {
+        fetch('https://vast-anchorage-20294.herokuapp.com/Register', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
