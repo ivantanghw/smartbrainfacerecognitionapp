@@ -24,7 +24,7 @@ class Register extends React.Component {
 
     onRegisterChange = () => {
         const {registerName, registerEmail, registerPassword} = this.state
-        fetch('http://localhost:3001/Register', {
+        fetch('http://localhost:3000/Register', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
